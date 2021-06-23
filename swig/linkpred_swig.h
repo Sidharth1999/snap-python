@@ -27,7 +27,22 @@ template <class PGraph>
     }
   }
 }*/
+/*int SamplePersonalizedPageRank(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd)
+{
+  int locationId = StartNIdV.GetRndVal(Rnd);
+  //printf("starting walk at %d\n", locationId);
+  while (Rnd.GetUniDev() >= JumpProb)
+  {
+    TNGraph::TNodeI location = Graph->GetNI(locationId);
+    int d = location.GetOutDeg();
+    if (d > 0)
+      locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+    else
+      locationId = StartNIdV.GetRndVal(Rnd);
+  }
+  return locationId;
+}*/
 int GetRndWalkRestart()
 {
-  return 2;
+  return 3;
 }
