@@ -1,7 +1,7 @@
 
 // random walk with restars to node JumpNId
 template <class PGraph>
-void GetRndWalkRestart(const PGraph& Graph, const double& JumpProb, const int& JumpNId, THash<TInt, TFlt>& RwrNIdH) {
+/*void GetRndWalkRestart(const PGraph& Graph, const double& JumpProb, const int& JumpNId, THash<TInt, TFlt>& RwrNIdH) {
   const double DefVal = 1.0/Graph->GetNodes();
   RwrNIdH.Clr(false);
   TIntH NIdOutDegH;
@@ -26,5 +26,8 @@ void GetRndWalkRestart(const PGraph& Graph, const double& JumpProb, const int& J
       RwrNIdH[i] /= Sum;
     }
   }
+}*/
+int GetRndWalkRestart()
+{
+  return 0;
 }
-
