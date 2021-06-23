@@ -29,5 +29,5 @@ template <class PGraph>
 }*/
 int GetRndWalkRestart()
 {
-  return 0;
+  return 1;
 }
