@@ -44,5 +44,5 @@ template <class PGraph>
 }*/
 int GetRndWalkRestart()
 {
-  return 3;
+  return 4;
 }
