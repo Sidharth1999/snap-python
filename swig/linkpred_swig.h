@@ -42,7 +42,18 @@ template <class PGraph>
   }
   return locationId;
 }*/
-int GetRndWalkRestart()
+int GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd)
 {
-  return 4;
+  int locationId = StartNIdV.GetRndVal(Rnd);
+  //printf("starting walk at %d\n", locationId);
+  while (Rnd.GetUniDev() >= JumpProb)
+  {
+    TNGraph::TNodeI location = Graph->GetNI(locationId);
+    int d = location.GetOutDeg();
+    if (d > 0)
+      locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+    else
+      locationId = StartNIdV.GetRndVal(Rnd);
+  }
+  return locationId;
 }
