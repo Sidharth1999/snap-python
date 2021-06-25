@@ -1,6 +1,5 @@
 
 // random walk with restars to node JumpNId
-template <class PGraph>
 /*void GetRndWalkRestart(const PGraph& Graph, const double& JumpProb, const int& JumpNId, THash<TInt, TFlt>& RwrNIdH) {
   const double DefVal = 1.0/Graph->GetNodes();
   RwrNIdH.Clr(false);
@@ -42,13 +41,14 @@ template <class PGraph>
   }
   return locationId;
 }*/
+template <class PGraph>
 int GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd)
 {
   int locationId = StartNIdV.GetRndVal(Rnd);
   //printf("starting walk at %d\n", locationId);
   while (Rnd.GetUniDev() >= JumpProb)
   {
-    TNGraph::TNodeI location = Graph->GetNI(locationId);
+    PGraph::TNodeI location = Graph->GetNI(locationId);
     int d = location.GetOutDeg();
     if (d > 0)
       locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
@@ -56,4 +56,10 @@ int GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNI
       locationId = StartNIdV.GetRndVal(Rnd);
   }
   return locationId;
+}
+
+template <class PGraph>
+void GetRndWalkTopN(const PGraph &Graph, double JumpProb, int N, THash<TInt, TFlt> &RwsNIdH, THash<TInt, TInt> &RwrNIdH)
+{
+  return;
 }
