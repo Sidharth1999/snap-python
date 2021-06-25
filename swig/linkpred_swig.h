@@ -42,24 +42,27 @@
   return locationId;
 }*/
 template <class PGraph>
-int GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd)
+void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
 {
-  int locationId = StartNIdV.GetRndVal(Rnd);
-  //printf("starting walk at %d\n", locationId);
-  while (Rnd.GetUniDev() >= JumpProb)
+  for (int i = 0; i < N; i++)
   {
-    typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
-    int d = location.GetOutDeg();
-    if (d > 0)
-      locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
-    else
-      locationId = StartNIdV.GetRndVal(Rnd);
+    int locationId = StartNIdV.GetRndVal(Rnd);
+    //printf("starting walk at %d\n", locationId);
+    while (Rnd.GetUniDev() >= JumpProb)
+    {
+      typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
+      int d = location.GetOutDeg();
+      if (d > 0)
+        locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+      else
+        locationId = StartNIdV.GetRndVal(Rnd);
+    }
+    RwrNIdH[locationId]++;
   }
-  return locationId;
 }
 
-template <class PGraph>
+/*template <class PGraph>
 void GetRndWalkTopN(const PGraph &Graph, double JumpProb, int N, THash<TInt, TFlt> &RwsNIdH, THash<TInt, TInt> &RwrNIdH)
 {
   return;
-}
+}*/
