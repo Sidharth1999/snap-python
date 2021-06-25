@@ -48,7 +48,7 @@ int GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNI
   //printf("starting walk at %d\n", locationId);
   while (Rnd.GetUniDev() >= JumpProb)
   {
-    PGraph::TNodeI location = Graph->GetNI(locationId);
+    typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
     int d = location.GetOutDeg();
     if (d > 0)
       locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
