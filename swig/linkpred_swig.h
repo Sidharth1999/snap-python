@@ -57,7 +57,7 @@ void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartN
       else
         locationId = StartNIdV.GetRndVal(Rnd);
     }
-    if (RwrNIdH.isKey(locationId))
+    if (RwrNIdH.IsKey(locationId))
     {
       RwrNIdH[locationId]++;
     }
