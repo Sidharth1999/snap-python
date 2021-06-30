@@ -63,7 +63,8 @@ void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartN
     }
     else
     {
-      RwrNIdH.AddDat(locationId, 1);
+      //RwrNIdH.AddDat(locationId, 1);
+      RwrNIdH[locationId] += 1;
     }
   }
 }
