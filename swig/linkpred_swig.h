@@ -41,37 +41,58 @@
   }
   return locationId;
 }*/
+
+/*
+The graph is effectively undirected - that means traditional 'dead-ends' cannot occur. Therefore, can infer the following (equivalent) statements:
+1)An isolated node has to be a user node
+2)As isolated node can only occur at the start node
+3)A random walk cannot reach a dead-end at a song node
+*/
 template <class PGraph>
 void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
 {
   for (int i = 0; i < N; i++)
   {
+    int hops = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
-    //printf("starting walk at %d\n", locationId);
     while (Rnd.GetUniDev() >= JumpProb)
     {
       typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
       if (d > 0)
+      {
         locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+        hops++;
+      }
       else
+      {
         locationId = StartNIdV.GetRndVal(Rnd);
+      }
     }
+
+    //ended on a user node, force a last hop
+    if (hops % 2 == 0)
+    {
+      typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
+      int d = location.GetOutDeg();
+      if (d > 0)
+      {
+        locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+      }
+      else
+      {
+        //must be an isolated user node
+        return;
+      }
+    }
+
     if (!RwrNIdH.IsKey(locationId))
     {
       RwrNIdH.AddDat(locationId, 1);
     }
     else
     {
-      //RwrNIdH.AddDat(locationId, 1);
-      //RwrNIdH[locationId] += 1;
       RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + 1);
     }
   }
 }
-
-/*template <class PGraph>
-void GetRndWalkTopN(const PGraph &Graph, double JumpProb, int N, THash<TInt, TFlt> &RwsNIdH, THash<TInt, TInt> &RwrNIdH)
-{
-  return;
-}*/
