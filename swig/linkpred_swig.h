@@ -75,7 +75,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &Start
     //ended on a user node, force a last hop
     if (hops % 2 == 0)
     {
-      typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
+      typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
       if (d > 0)
       {
