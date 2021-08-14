@@ -60,6 +60,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &Start
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       TStr type = Graph->GetStrAttrDatN(locationId, "type");
       bool song = type == TStr("song");
+      printf("%d\n", song);
       int d = location.GetOutDeg();
       if (d > 0)
       {
