@@ -57,7 +57,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &Start
     int locationId = StartNIdV.GetRndVal(Rnd);
     while (Rnd.GetUniDev() >= JumpProb)
     {
-      typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
+      typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       TStr type = Graph->GetStrAttrDatN(locationId, "type");
       printf(type);
       int d = location.GetOutDeg();
