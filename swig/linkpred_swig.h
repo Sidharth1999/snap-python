@@ -49,23 +49,24 @@ The graph is effectively undirected - that means traditional 'dead-ends' cannot 
 3)A random walk cannot reach a dead-end at a song node
 */
 template <class PGraph>
-void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
+void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
 {
   for (int i = 0; i < N; i++)
   {
-    int hops = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
     while (Rnd.GetUniDev() >= JumpProb)
     {
+      if (Rnd.GetUniDev() >= RandomHopProb)
+      {
+        locationId = Graph->GetRndNId();
+        continue;
+      }
+
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
-      TStr type = Graph->GetStrAttrDatN(locationId, "type");
-      bool song = type == TStr("song");
-      printf("%d\n", song);
       int d = location.GetOutDeg();
       if (d > 0)
       {
         locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
-        hops++;
       }
       else
       {
@@ -73,8 +74,9 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &Start
       }
     }
 
+    TStr type = Graph->GetStrAttrDatN(locationId, "type");
     //ended on a user node, force a last hop
-    if (hops % 2 == 0)
+    if (type == TStr("user"))
     {
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
