@@ -42,6 +42,8 @@
   return locationId;
 }*/
 
+#include <string>
+using namespace std;
 /*
 The graph is effectively undirected - that means traditional 'dead-ends' cannot occur. Therefore, can infer the following (equivalent) statements:
 1)An isolated node has to be a user node
@@ -49,7 +51,7 @@ The graph is effectively undirected - that means traditional 'dead-ends' cannot 
 3)A random walk cannot reach a dead-end at a song node
 */
 template <class PGraph>
-void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
+void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
 {
   for (int i = 0; i < N; i++)
   {
@@ -58,6 +60,8 @@ void GetRndWalkRestart(const PGraph &Graph, double JumpProb, const TIntV &StartN
     while (Rnd.GetUniDev() >= JumpProb)
     {
       typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
+      string type = Graph->GetStrAttrDatN(locationId, "type");
+      printf(type);
       int d = location.GetOutDeg();
       if (d > 0)
       {
