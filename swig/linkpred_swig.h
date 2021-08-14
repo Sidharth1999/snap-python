@@ -42,8 +42,6 @@
   return locationId;
 }*/
 
-#include <string>
-using namespace std;
 /*
 The graph is effectively undirected - that means traditional 'dead-ends' cannot occur. Therefore, can infer the following (equivalent) statements:
 1)An isolated node has to be a user node
@@ -60,7 +58,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, const TIntV &Start
     while (Rnd.GetUniDev() >= JumpProb)
     {
       typename PGraph::TObj::TNodeI location = Graph->GetNI(locationId);
-      string type = Graph->GetStrAttrDatN(locationId, "type");
+      TStr type = Graph->GetStrAttrDatN(locationId, "type");
       printf(type);
       int d = location.GetOutDeg();
       if (d > 0)
