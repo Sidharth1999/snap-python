@@ -80,6 +80,16 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
     {
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
+      
+      TIntV songNeighbors;
+      for (int i = 0; i < d; i++)
+      {
+        int neighborId = location.GetOutNId(i);
+        if (Graph->GetStrAttrDatN(neighborId, "type") == TStr("song"))
+          songNeighbors.append(neighborId);
+      }
+      locationId = songNeighbors[Rnd.GetUniDevInt(d)];
+      
       if (d > 0)
       {
         locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
