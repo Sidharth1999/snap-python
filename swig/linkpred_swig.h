@@ -82,8 +82,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
         }
         else
         {
-           //RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + weight);
-          ;
+           RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + weight);
         }
       }
     }
