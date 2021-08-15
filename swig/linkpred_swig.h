@@ -72,42 +72,18 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
       {
         locationId = StartNIdV.GetRndVal(Rnd);
       }
-    }
-
-    TStr type = Graph->GetStrAttrDatN(locationId, "type");
-    //ended on a user node, force a last hop
-    if (type == TStr("user"))
-    {
-      typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
-      int d = location.GetOutDeg();
       
-      TIntV songNeighbors;
-      for (int i = 0; i < d; i++)
+      TInt weight = Graph->GetIntAttrDatN(locationId, "weight");
+      if (!RwrNIdH.IsKey(locationId))
       {
-        int neighborId = location.GetOutNId(i);
-        if (Graph->GetStrAttrDatN(neighborId, "type") == TStr("song"))
-          songNeighbors.Add(TInt(neighborId));
-      }
-      locationId = songNeighbors[Rnd.GetUniDevInt(d)]();
-      
-      if (d > 0)
-      {
-        locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+        if(weight > 0) 
+          RwrNIdH.AddDat(locationId, weight);
       }
       else
       {
-        //must be an isolated user node
-        return;
+        if(weight > 0)
+          RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + weight);
       }
-    }
-
-    if (!RwrNIdH.IsKey(locationId))
-    {
-      RwrNIdH.AddDat(locationId, 1);
-    }
-    else
-    {
-      RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + 1);
     }
   }
 }
