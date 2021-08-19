@@ -53,7 +53,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
 {
   for (int i = 0; i < N; i++)
   {
-    int sign = 1;
+    int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
     while (Rnd.GetUniDev() >= JumpProb)
     {
@@ -78,21 +78,18 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
       TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
       if(edgeType() == "dislike")
       {
-        sign = -sign;
-      }
-      
-      int weight = sign * Graph->GetStrAttrDatN(locationId, "weight").GetInt();
-      if(weight > 0)
-      {
-        if (!RwrNIdH.IsKey(locationId))
-        {
-           RwrNIdH.AddDat(locationId, weight);
-        }
-        else
-        {
-           RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + weight);
-        }
+        dislikes++;
       }
     }
+    
+    int score = dislikes % 2 ? -1 : 1;
+    if (!RwrNIdH.IsKey(locationId))
+    {
+       RwrNIdH.AddDat(locationId, score);
+    }
+    else
+    {
+       RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + score);
+    }    
   }
 }
