@@ -72,7 +72,7 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
       }
       else
       {
-        resetted = true
+        resetted = true;
         locationId = StartNIdV.GetRndVal(Rnd);
       }
       
