@@ -62,7 +62,8 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
         locationId = Graph->GetRndNId();
         continue;
       }
-
+      
+      bool resetted = false;
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
       if (d > 0)
@@ -71,15 +72,20 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
       }
       else
       {
+        resetted = true
         locationId = StartNIdV.GetRndVal(Rnd);
       }
       
-      int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
-      TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
-      if(edgeType() == "dislike")
+      if(!resetted) //then an edge was travelled
       {
-        dislikes++;
+        int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
+        TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
+        if(edgeType() == "dislike")
+        {
+          dislikes++;
+        }
       }
+      
     }
     
     int score = dislikes % 2 ? -1 : 1;
@@ -87,9 +93,9 @@ void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopPr
     {
        RwrNIdH.AddDat(locationId, score);
     }
-    /*else
+    else
     {
        RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + score);
-    }*/  
+    } 
   }
 }
