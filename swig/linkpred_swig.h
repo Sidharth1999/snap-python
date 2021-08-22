@@ -59,7 +59,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
                        int N,
                        THash<TInt, TInt> &RwrNIdH){  
   for(int i = 0; i < N; i++){
-    const PNEANet Graph = SongUserNet;
+    PNEANet Graph = SongUserNet;
     TStr netType = TStr("Song/User");
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
