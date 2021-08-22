@@ -55,7 +55,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
                        const TIntV& StartNIdV,
                        const TRnd& Rnd,
                        int N,
-                       THash<TInt, TInt> &RwrNIdH){  
+                       THash<TInt, TInt> &RwrNIdH)
 {
   for (int i = 0; i < N; i++)
   {
