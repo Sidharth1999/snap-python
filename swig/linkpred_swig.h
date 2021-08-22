@@ -42,7 +42,7 @@
   return locationId;
 }*/
 template <class PGraph>
-void GetRndWalkRestart(const PNEANet& SongUserNet,
+void GetRndWalkRestart(const PNEANet& Graph,
                        const PNEANet& ArtistUserNet,
                        const PNEANet& ArtistSongNet,
                        double JumpProb,
@@ -60,7 +60,8 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
 {
   for (int i = 0; i < N; i++)
   {
-    PNEANet Graph = SongUserNet;
+    //PNEANet Graph = SongUserNet;
+    
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
     int latestSongId = -1;
