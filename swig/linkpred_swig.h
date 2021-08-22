@@ -59,7 +59,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
                        int N,
                        THash<TInt, TInt> &RwrNIdH){  
   for(int i = 0; i < N; i++){
-    const PNEANet& Graph = SongUserNet;
+    const PNEANet Graph = SongUserNet;
     TStr netType = TStr("Song/User");
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
@@ -83,19 +83,19 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
       }
       
       //Save latest song id
-      if (Graph->GetStrAttrDatN(locationId, "type")() == "song"){ 
+      if (Graph->GetStrAttrDatN(locationId, "type") == TStr("song")){ 
         latestSongId = locationId;
       }
       
       int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
       TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
-      if (edgeType() == "dislike"){
+      if (edgeType == TStr("dislike")){
         dislikes++;
       }
       
       //Network hopping
       double hopNet = Rnd.GetUniDev();
-      if (netType() == "Song/User"){
+      if (netType == TStr("Song/User")){
         if (hopNet > SongUserNetStayThresh && hopNet > SongUserNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
@@ -106,7 +106,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
           Graph = SongUserNet;
           netType = TStr("Song/User");
         }
-      } else if (netType() == "Artist/User"){
+      } else if (netType == TStr("Artist/User")){
         if (hopNet > ArtistUserNetStayThresh && hopNet > ArtistUserNetStayThresh && SongUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = SongUserNet;
           netType = TStr("Song/User");
@@ -117,7 +117,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
         }
-      } else if (netType() == "Artist/Song"){
+      } else if (netType == TStr("Artist/Song")){
         if (hopNet > ArtistSongNetStayThresh && hopNet > ArtistSongNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
