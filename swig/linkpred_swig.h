@@ -88,14 +88,14 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
       }
       
       int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
-      TStr edgeType = Graph.GetStrAttrDatE(edgeId, "type");
+      TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
       if (edgeType() == "dislike"){
         dislikes++;
       }
       
       //Network hopping
       double hopNet = Rnd.GetUniDev();
-      if (netType() == 'Song/User'){
+      if (netType() == "Song/User"){
         if (hopNet > SongUserNetStayThresh && hopNet > SongUserNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
@@ -106,7 +106,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
           Graph = SongUserNet;
           netType = TStr("Song/User");
         }
-      } else if (type == "Artist/User"){
+      } else if (netType() == "Artist/User"){
         if (hopNet > ArtistUserNetStayThresh && hopNet > ArtistUserNetStayThresh && SongUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = SongUserNet;
           netType = TStr("Song/User");
@@ -117,7 +117,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
         }
-      } else if (type == "Artist/Song"){
+      } else if (netType() == "Artist/Song"){
         if (hopNet > ArtistSongNetStayThresh && hopNet > ArtistSongNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
