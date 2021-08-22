@@ -41,6 +41,7 @@
   }
   return locationId;
 }*/
+template <class PGraph>
 void GetRndWalkRestart(const PNEANet& SongUserNet,
                        const PNEANet& ArtistUserNet,
                        const PNEANet& ArtistSongNet,
