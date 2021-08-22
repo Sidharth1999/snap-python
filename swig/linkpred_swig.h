@@ -41,8 +41,59 @@
   }
   return locationId;
 }*/
-
 template <class PGraph>
+void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
+{
+  for (int i = 0; i < N; i++)
+  {
+    int dislikes = 0;
+    int locationId = StartNIdV.GetRndVal(Rnd);
+    while (Rnd.GetUniDev() >= JumpProb)
+    {
+      if (Rnd.GetUniDev() >= RandomHopProb)
+      {
+        locationId = Graph->GetRndNId();
+        continue;
+      }
+      
+      bool resetted = false;
+      typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
+      int d = location.GetOutDeg();
+      if (d > 0)
+      {
+        locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
+      }
+      else
+      {
+        resetted = true;
+        locationId = StartNIdV.GetRndVal(Rnd);
+      }
+      
+      if(!resetted) //then an edge was travelled
+      {
+        int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
+        TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
+        if(edgeType() == "dislike")
+        {
+          dislikes++;
+        }
+      }
+      
+    }
+    
+    int score = dislikes % 2 ? -1 : 1;
+    if (!RwrNIdH.IsKey(locationId))
+    {
+       RwrNIdH.AddDat(locationId, score);
+    }
+    else
+    {
+       RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + score);
+    } 
+  }
+}
+
+/*template <class PGraph>
 void GetRndWalkRestart(const PNEANet& SongUserNet,
                        const PNEANet& ArtistUserNet,
                        const PNEANet& ArtistSongNet,
@@ -139,4 +190,4 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
     else
       RwrNIdH.AddDat(latestSongId, RwrNIdH.GetDat(latestSongId) + score);
   }
-}
+}*/
