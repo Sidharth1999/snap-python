@@ -77,7 +77,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
       int d = location.GetOutDeg();
       if (d > 0){
         locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
-      } else
+      } else {
         locationId = StartNIdV.GetRndVal(Rnd);
         continue;
       }
@@ -110,7 +110,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
         if (hopNet > ArtistUserNetStayThresh && hopNet > ArtistUserNetStayThresh && SongUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = SongUserNet;
           netType = TStr("Song/User");
-        else if (hopNet > ArtistUserNetStayThresh && hopNet <= ArtistUserNetStayThresh && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
+        } else if (hopNet > ArtistUserNetStayThresh && hopNet <= ArtistUserNetStayThresh && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistSongNet;
           netType = TStr("Artist/Song");
         } else {
@@ -128,9 +128,9 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
           Graph = ArtistSongNet;
           netType = TStr("Artist/Song");
         }
-      } 
-    }   
-    
+      }
+    }
+  
     if (latestSongId == -1) continue;
 
     int score = dislikes % 2 ? -1 : 1;
