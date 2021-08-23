@@ -42,54 +42,101 @@
   return locationId;
 }*/
 template <class PGraph>
-void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopProb, const TIntV& StartNIdV, const TRnd& Rnd, int N, THash<TInt, TInt>& RwrNIdH)
-{
-  for (int i = 0; i < N; i++)
-  {
+void GetRndWalkRestart(const PNEANet& SongUserNet,
+                       const PNEANet& ArtistUserNet,
+                       const PNEANet& ArtistSongNet,
+                       double JumpProb,
+                       double RandomHopProb,
+                       double SongUserNetHopThresh,
+                       double SongUserNetStayThresh,
+                       double ArtistUserNetHopThresh,
+                       double ArtistUserNetStayThresh,
+                       double ArtistSongNetHopThresh,
+                       double ArtistSongNetStayThresh,
+                       const TIntV& StartNIdV,
+                       TRnd& Rnd,
+                       int N,
+                       THash<TInt, TInt> &RwrNIdH){  
+  for(int i = 0; i < N; i++){
+    PNEANet Graph = SongUserNet;
+    TStr netType = TStr("Song/User");
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
-    while (Rnd.GetUniDev() >= JumpProb)
-    {
-      if (Rnd.GetUniDev() >= RandomHopProb)
-      {
+    int latestSongId = -1;
+    
+    while (Rnd.GetUniDev() >= JumpProb){
+      //Hop to random node in network
+      if (Rnd.GetUniDev() >= RandomHopProb){
         locationId = Graph->GetRndNId();
         continue;
       }
-      
-      bool resetted = false;
+
+      //Random neighbor or restart if no neighbor
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
-      if (d > 0)
-      {
+      if (d > 0){
         locationId = location.GetOutNId(Rnd.GetUniDevInt(d));
-      }
-      else
-      {
-        resetted = true;
+      } else {
         locationId = StartNIdV.GetRndVal(Rnd);
+        continue;
       }
       
-      if(!resetted) //then an edge was travelled
-      {
-        int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
-        TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
-        if(edgeType() == "dislike")
-        {
-          dislikes++;
+      //Save latest song id
+      if (Graph->GetStrAttrDatN(locationId, "type") == TStr("song")){ 
+        latestSongId = locationId;
+      }
+      
+      int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
+      TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
+      if (edgeType == TStr("dislike")){
+        dislikes++;
+      }
+      
+      //Network hopping
+      double hopNet = Rnd.GetUniDev();
+      if (netType == TStr("Song/User")){
+        if (hopNet > SongUserNetStayThresh && hopNet > SongUserNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = ArtistUserNet;
+          netType = TStr("Artist/User");
+        } else if (hopNet > SongUserNetStayThresh && hopNet <= SongUserNetStayThresh && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = ArtistSongNet;
+          netType = TStr("Artist/Song");
+        } else {
+          Graph = SongUserNet;
+          netType = TStr("Song/User");
+        }
+      } else if (netType == TStr("Artist/User")){
+        if (hopNet > ArtistUserNetStayThresh && hopNet > ArtistUserNetStayThresh && SongUserNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = SongUserNet;
+          netType = TStr("Song/User");
+        } else if (hopNet > ArtistUserNetStayThresh && hopNet <= ArtistUserNetStayThresh && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = ArtistSongNet;
+          netType = TStr("Artist/Song");
+        } else {
+          Graph = ArtistUserNet;
+          netType = TStr("Artist/User");
+        }
+      } else if (netType == TStr("Artist/Song")){
+        if (hopNet > ArtistSongNetStayThresh && hopNet > ArtistSongNetStayThresh && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = ArtistUserNet;
+          netType = TStr("Artist/User");
+        } else if (hopNet > ArtistSongNetStayThresh && hopNet <= ArtistSongNetStayThresh && SongUserNet->GetNI(locationId).GetOutDeg() > 0){
+          Graph = SongUserNet;
+          netType = TStr("Song/User");
+        } else {
+          Graph = ArtistSongNet;
+          netType = TStr("Artist/Song");
         }
       }
-      
     }
-    
+  
+    if (latestSongId == -1) continue;
+
     int score = dislikes % 2 ? -1 : 1;
-    if (!RwrNIdH.IsKey(locationId))
-    {
-       RwrNIdH.AddDat(locationId, score);
-    }
+    if (!RwrNIdH.IsKey(latestSongId)) 
+      RwrNIdH.AddDat(latestSongId, score);
     else
-    {
-       RwrNIdH.AddDat(locationId, RwrNIdH.GetDat(locationId) + score);
-    } 
+      RwrNIdH.AddDat(latestSongId, RwrNIdH.GetDat(latestSongId) + score);
   }
 }
 
