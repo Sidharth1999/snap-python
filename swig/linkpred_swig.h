@@ -42,10 +42,10 @@
   return locationId;
 }*/
 template <class PGraph>
-void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopProb, const TIntV& StartNIdV, const TRnd& Rnd, int N, THash<TInt, TInt> &RwrNIdH){
-  for (int i = 0; i < N; i++){
-    //PNEANet Graph = SongUserNet;
-    
+void GetRndWalkRestart(const PNEANet &Graph, double JumpProb, double RandomHopProb, const TIntV &StartNIdV, TRnd &Rnd, int N, THash<TInt, TInt> &RwrNIdH)
+{
+  for (int i = 0; i < N; i++)
+  {
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
     while (Rnd.GetUniDev() >= JumpProb)
@@ -56,6 +56,7 @@ void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopPr
         continue;
       }
       
+      bool resetted = false;
       typename PNEANet::TObj::TNodeI location = Graph->GetNI(locationId);
       int d = location.GetOutDeg();
       if (d > 0)
@@ -64,15 +65,18 @@ void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopPr
       }
       else
       {
+        resetted = true;
         locationId = StartNIdV.GetRndVal(Rnd);
-        continue;
       }
       
-      int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
-      TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
-      if(edgeType() == "dislike")
+      if(!resetted) //then an edge was travelled
       {
-        dislikes++;
+        int edgeId = Graph->GetEI(location.GetId(), locationId).GetId();
+        TStr edgeType = Graph->GetStrAttrDatE(edgeId, "type");
+        if(edgeType() == "dislike")
+        {
+          dislikes++;
+        }
       }
       
     }
