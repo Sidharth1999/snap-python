@@ -43,17 +43,8 @@
 }*/
 template <class PGraph>
 void GetRndWalkRestart(const PNEANet& Graph,
-                       const PNEANet& SongUserNet,
-                       const PNEANet& ArtistUserNet,
-                       const PNEANet& ArtistSongNet,
                        double JumpProb,
                        double RandomHopProb,
-                       double SongUserNetHopThresh,
-                       double SongUserNetStayThresh,
-                       double ArtistUserNetHopThresh,
-                       double ArtistUserNetStayThresh,
-                       double ArtistSongNetHopThresh,
-                       double ArtistSongNetStayThresh,
                        const TIntV& StartNIdV,
                        const TRnd& Rnd,
                        int N,
