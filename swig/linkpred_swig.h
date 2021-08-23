@@ -56,7 +56,6 @@ void GetRndWalkRestart(const PNEANet& Graph,
     
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
-    int latestSongId = -1;
     while (Rnd.GetUniDev() >= JumpProb)
     {
       if (Rnd.GetUniDev() >= RandomHopProb)
