@@ -46,7 +46,6 @@ void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopPr
 {
   for (int i = 0; i < N; i++)
   {
-    //PNEANet Graph = SongUserNet;
     int dislikes = 0;
     int locationId = StartNIdV.GetRndVal(Rnd);
     while (Rnd.GetUniDev() >= JumpProb)
