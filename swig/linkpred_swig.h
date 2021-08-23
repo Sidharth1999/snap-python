@@ -42,16 +42,8 @@
   return locationId;
 }*/
 template <class PGraph>
-void GetRndWalkRestart(const PNEANet& Graph,
-                       double JumpProb,
-                       double RandomHopProb,
-                       const TIntV& StartNIdV,
-                       const TRnd& Rnd,
-                       int N,
-                       THash<TInt, TInt> &RwrNIdH)
-{
-  for (int i = 0; i < N; i++)
-  {
+void GetRndWalkRestart(const PNEANet& Graph, double JumpProb, double RandomHopProb, const TIntV& StartNIdV, const TRnd& Rnd, int N, THash<TInt, TInt> &RwrNIdH){
+  for (int i = 0; i < N; i++){
     //PNEANet Graph = SongUserNet;
     
     int dislikes = 0;
