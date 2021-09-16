@@ -64,9 +64,9 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
     int locationId = StartNIdV.GetRndVal(Rnd);
     int latestSongId = -1;
     
-    while (Rnd.GetUniDev() >= JumpProb){
+    while (Rnd.GetUniDev() <= JumpProb){
       //Hop to random node in network
-      if (Rnd.GetUniDev() >= RandomHopProb){
+      if (Rnd.GetUniDev() <= RandomHopProb){
         locationId = Graph->GetRndNId();
         continue;
       }
