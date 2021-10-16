@@ -48,10 +48,10 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
                        const PNEANet& TagSongNet,
                        double JumpProb,
                        double RandomHopProb,
-                       double SongUserHopThreshs [3],
-                       double ArtistUserHopThreshs [3],
-                       double ArtistSongHopThreshs [3],
-                       double TagSongHopThreshs [3],
+                       double SongUserHopThreshs [4],
+                       double ArtistUserHopThreshs [4],
+                       double ArtistSongHopThreshs [4],
+                       double TagSongHopThreshs [4],
                        const TIntV& StartNIdV,
                        TRnd& Rnd,
                        int N,
@@ -104,7 +104,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
         } else if (hopNet >= SongUserHopThreshs[1] && hopNet < SongUserHopThreshs[2] && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistSongNet;
           netType = TStr("Artist/Song");
-        } else if (hopNet >= SongUserHopThreshs[2] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
+        } else if (hopNet >= SongUserHopThreshs[2] && hopNet <= SongUserHopThreshs[3] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = TagSongNet;
           netType = TStr("Tag/Song");
         }
@@ -118,7 +118,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
         } else if (hopNet >= ArtistUserHopThreshs[1] && hopNet < ArtistUserHopThreshs[2] && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistSongNet;
           netType = TStr("Artist/Song");
-        } else if (hopNet >= ArtistUserHopThreshs[2] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
+        } else if (hopNet >= ArtistUserHopThreshs[2] && hopNet < ArtistUserHopThreshs[3] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = TagSongNet;
           netType = TStr("Tag/Song");
         }
@@ -132,7 +132,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
         } else if (hopNet >= ArtistSongHopThreshs[1] && hopNet < ArtistSongHopThreshs[2] && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
-        } else if (hopNet >= ArtistSongHopThreshs[2] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
+        } else if (hopNet >= ArtistSongHopThreshs[2] && hopNet < ArtistSongHopThreshs[3] && TagSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = TagSongNet;
           netType = TStr("Tag/Song");
         }
@@ -146,7 +146,7 @@ void GetRndWalkRestart(const PNEANet& SongUserNet,
         } else if (hopNet >= TagSongHopThreshs[1] && hopNet < TagSongHopThreshs[2] && ArtistUserNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistUserNet;
           netType = TStr("Artist/User");
-        } else if (hopNet >= TagSongHopThreshs[2] && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
+        } else if (hopNet >= TagSongHopThreshs[2] && hopNet < TagSongHopThreshs[3] && ArtistSongNet->GetNI(locationId).GetOutDeg() > 0){
           Graph = ArtistSongNet;
           netType = TStr("Artist/Song");
         }
